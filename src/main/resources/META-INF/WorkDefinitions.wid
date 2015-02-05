@@ -1,0 +1,36 @@
+import org.drools.process.core.datatype.impl.type.IntegerDataType;
+import org.drools.process.core.datatype.impl.type.StringDataType;
+import org.drools.process.core.datatype.impl.type.BooleanDataType;
+import org.drools.process.core.datatype.impl.type.ObjectDataType;
+[  
+
+  [
+    "name" : "ACTUALIZA_DDBB",
+    "displayName" : "ACTUALIZA_DDBB",
+    "parameters" : [
+    ],
+    "results" : [
+    ],
+    "icon": "icons/database.png" 
+  ],
+  [
+    "name" : "Emergency",
+    "displayName" : "Emergency",
+    "parameters" : [
+    ],
+    "icon": "icons/emergency.png" 
+  ],
+  [
+    "name" : "EmailHandler",
+    "displayName" : "Email",
+    "parameters" : [
+        "From" : new StringDataType(),
+        "To" : new StringDataType(),
+        "Body": new StringDataType(),
+        "Cc" : new StringDataType(),
+        "Bcc" : new StringDataType()
+    ],
+    "icon": "icons/email_.png" 
+  ]
+  
+]

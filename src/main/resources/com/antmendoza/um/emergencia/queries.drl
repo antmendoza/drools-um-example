@@ -1,0 +1,21 @@
+//created on: Dec 27, 2014
+package com.antmendoza.um.emergencia
+
+//list any import classes here.
+import com.antmendoza.um.model.*;
+import org.kie.api.runtime.process.WorkflowProcessInstance;
+
+
+
+
+
+query "Sprinkler on state on"(boolean $on)
+    $sprinkler : Sprinkler(on == $on)
+end
+
+
+
+query "Get Fire from room"(Room $room)
+    $fire : Fire(room == $room)
+end
+

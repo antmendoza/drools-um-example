@@ -1,0 +1,75 @@
+//created on: Dec 27, 2014
+package com.antmendoza.um.emergencia
+
+//list any import classes here.
+import com.antmendoza.um.model.*;
+import org.kie.api.runtime.process.WorkflowProcessInstance;
+
+
+global org.slf4j.Logger logDrools
+
+//declare any global variables here
+rule "Cuando haya fuego una la habitación, encender el extintor"
+	when
+	    Fire($room : room)
+	    $sprinkler : Sprinkler( room == $room, on == false )
+	then
+		logDrools.debug("Turn on sprinkler on room: [" + $room.getName()+"]");
+	    modify( $sprinkler ) { setOn( true ) };
+end
+
+
+
+rule "Cuando no haya fuego en la habitación, apagar el extintor"
+	when
+	    $room : Room()
+	    $sprinkler : Sprinkler( room == $room, on == true )
+	    not Fire( room == $room )
+	then
+		logDrools.debug("Turn off sprinkler on room: [" + $room.getName()+"]");
+		modify( $sprinkler ) { setOn( false ) };
+end
+
+
+rule "Sound fire alarm in case temperature rises above threshold"
+	when
+		not Fire()
+		$room:Room()
+		accumulate(
+			$sensor : SensorReading(room == $room, $temp : temperature ) over window:lenght(3); 
+            $numSensor   : count($sensor),
+			$avgTemperature : average( $temp ) ;
+			$avgTemperature > 50,
+			$numSensor > 2 )
+	then
+		logDrools.debug("New fire on room: [" + $room.getName()+"]; avgTemperature: ["+$avgTemperature+"]");
+		insert(new Fire($room));
+end
+
+
+rule "Start emergency process when fire in room"
+	when
+		$room: Room()
+		$fire: Fire(room == $room)
+	then
+		String roomName = $room.getName();
+		logDrools.debug("exists Fire in room: ["+roomName+"]-> Start process 'activa_emergencia'");
+		java.util.Map data = new java.util.HashMap();
+    	data.put("fire", $fire );
+		kcontext.getKieRuntime().startProcess("com.antmendoza.um.emergency.active_emergency", data);
+end
+
+
+
+rule "Imprimir estado cuando todo esté ok"
+	when
+
+	    $pi: WorkflowProcessInstance( state == WorkflowProcessInstance.STATE_COMPLETED )		    
+	then
+		logDrools.debug("ProcessInstance completed  ["+$pi+"]");
+
+end
+
+
+
+

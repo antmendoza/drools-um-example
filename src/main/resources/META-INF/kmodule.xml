@@ -1,0 +1,39 @@
+<kmodule xmlns="http://jboss.org/kie/6.0.0/kmodule" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+
+
+	<kbase name="kb_emergencia" eventProcessingMode="stream"
+		equalsBehavior="identity" packages="com.antmendoza.um.emergencia">
+
+		<ksession name="ks_umu_emergencia_test" clockType="pseudo"
+			default="true">
+			<workItemHandlers>
+				<workItemHandler
+					type="com.antmendoza.workitem.mock.AutoCompleteWorkItemHandler"
+					name="Emergency" />
+				<workItemHandler
+					type="com.antmendoza.workitem.mock.WaitForCompleteWorkItemHandler"
+					name="Human Task" />
+			</workItemHandlers>
+			<listeners>
+				<!--ruleRuntimeEventListener type="org.kie.api.event.rule.DebugRuleRuntimeEventListener" 
+					/> <agendaEventListener type="org.kie.api.event.rule.DebugAgendaEventListener" 
+					/ -->
+				<agendaEventListener
+					type="com.antmendoza.um.listener.BussinesRuleAgendaEventListener" />
+				<processEventListener
+					type="com.antmendoza.um.listener.StartProcessEventListener" />
+				<processEventListener
+					type="com.antmendoza.um.listener.CompleteProcessEventListener" />
+				<processEventListener
+					type="com.antmendoza.um.listener.VariableChangeEventListener" />
+			</listeners>
+		</ksession>
+
+
+
+	</kbase>
+
+
+
+</kmodule>
