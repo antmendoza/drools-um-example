@@ -8,7 +8,7 @@
 	<artifactId>drools-um</artifactId>
 	<version>1.0</version>
 	<name>drools-um</name>
-	<packaging>ejb</packaging>
+	<packaging>jar</packaging>
 
 
 	<dependencies>
